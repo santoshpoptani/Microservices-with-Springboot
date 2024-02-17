@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.microservice</groupId>
+  <artifactId>microserviceintro</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>Archetype - microserviceintro</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>19</maven.compiler.source>
+    <maven.compiler.target>19</maven.compiler.target>
+    <spring.boot.depenencies.version>3.0.3</spring.boot.depenencies.version>
+  </properties>
+
+  <!--The dependenciesManagement useful in microservices architectures where you have
+  several services that share common dependencies.By declaring dependencies in the
+  <dependencyManagement> section of the parent POM, you can ensure consistency and avoid
+  duplication across multiple microservices. -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring.boot.depenencies.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <!--This part of dependencies will act as default dependency required to each services-->
+ <dependencies>
+   <dependency>
+     <groupId>org.projectlombok</groupId>
+     <artifactId>lombok</artifactId>
+     <version>1.18.24</version>
+   </dependency>
+   <dependency>
+     <groupId>org.springframework.boot</groupId>
+     <artifactId>spring-boot-starter-test</artifactId>
+     <version>3.0.3-SNAPSHOT</version>
+   </dependency>
+ </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+<plugin>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-maven-plugin</artifactId>
+  <version>${spring.boot.depenencies.version}</version>
+</plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
