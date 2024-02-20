@@ -2,6 +2,8 @@ package org.microservice.customer;
 
 import org.microservice.clients.fraud.FraudCheckResponse;
 import org.microservice.clients.fraud.FraudClient;
+import org.microservice.clients.fraud.Notification.NotificationClient;
+import org.microservice.clients.fraud.Notification.NotificationRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,11 +12,13 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final RestTemplate restTemplate;
     private final FraudClient fraudClient;
+    private final NotificationClient notificationClient;
 
-    public CustomerService(CustomerRepository customerRepository, RestTemplate restTemplate, FraudClient fraudClient) {
+    public CustomerService(CustomerRepository customerRepository, RestTemplate restTemplate, FraudClient fraudClient, NotificationClient notificationClient) {
         this.customerRepository = customerRepository;
         this.restTemplate = restTemplate;
         this.fraudClient = fraudClient;
+        this.notificationClient = notificationClient;
     }
 
     public void registerCustomer(CustomerRegistrationRequest customerRequest) {
@@ -40,6 +44,11 @@ public class CustomerService {
 
         
         FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customerEntity.getId());
+
+        notificationClient.sendNotification(new NotificationRequest(customerEntity.getId(),
+                customerEntity.getEmail(),
+                String.format("Hi %s, welcome to microservices...",
+                        customerEntity.getName())));
         if (fraudCheckResponse.isfraudster()) {
             throw new IllegalStateException("Fraduster");
         }
