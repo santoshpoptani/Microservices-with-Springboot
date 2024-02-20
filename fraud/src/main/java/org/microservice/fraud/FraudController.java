@@ -1,5 +1,6 @@
 package org.microservice.fraud;
 
+import org.microservice.clients.fraud.FraudCheckResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
