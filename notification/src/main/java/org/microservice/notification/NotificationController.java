@@ -1,5 +1,6 @@
 package org.microservice.notification;
 
+import feign.FeignException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.microservice.clients.fraud.Notification.NotificationRequest;
@@ -17,6 +18,13 @@ public class NotificationController {
     @PostMapping
     public void sendNotification(@RequestBody NotificationRequest notificationRequest) {
         log.info("New notification... {}", notificationRequest);
-        notificationService.send(notificationRequest);
+        try{
+            notificationService.send(notificationRequest);
+        }
+        catch (FeignException feignException)
+        {
+            log.error(feignException.getMessage());
+        }
+
     }
 }

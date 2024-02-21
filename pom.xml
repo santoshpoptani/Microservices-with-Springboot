@@ -22,8 +22,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
-        <spring.boot.depenencies.version>3.0.3</spring.boot.depenencies.version>
-        <spring-cloud.version>2022.0.3</spring-cloud.version>
+        <!--<spring.boot.depenencies.version>3.0.3</spring.boot.depenencies.version>-->
+        <spring.boot.depenencies.version>2.7.1</spring.boot.depenencies.version>
+        <spring-cloud.version>2021.0.3</spring-cloud.version>
     </properties>
 
     <!--The dependenciesManagement useful in microservices architectures where you have
@@ -47,6 +48,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -65,7 +67,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>4.0.3</version>
+            <version>3.1.1</version>
         </dependency>
     </dependencies>
 
