@@ -9,7 +9,12 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * Hello world!
  *
  */
-@SpringBootApplication
+@SpringBootApplication(
+        scanBasePackages = {
+                "org.microservice.customer",
+                "org.microservice.amqp"
+        }
+)
 @EnableDiscoveryClient
 @EnableFeignClients(
         basePackages = "org.microservice.clients"

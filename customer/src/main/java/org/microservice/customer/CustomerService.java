@@ -1,5 +1,6 @@
 package org.microservice.customer;
 
+import org.microservice.amqp.RabbitMQPublisher;
 import org.microservice.clients.fraud.FraudCheckResponse;
 import org.microservice.clients.fraud.FraudClient;
 import org.microservice.clients.fraud.Notification.NotificationClient;
@@ -10,15 +11,13 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
-    private final RestTemplate restTemplate;
     private final FraudClient fraudClient;
-    private final NotificationClient notificationClient;
+    private final RabbitMQPublisher rabbitMQPublisher;
 
-    public CustomerService(CustomerRepository customerRepository, RestTemplate restTemplate, FraudClient fraudClient, NotificationClient notificationClient) {
+    public CustomerService(CustomerRepository customerRepository, FraudClient fraudClient, RabbitMQPublisher rabbitMQPublisher) {
         this.customerRepository = customerRepository;
-        this.restTemplate = restTemplate;
         this.fraudClient = fraudClient;
-        this.notificationClient = notificationClient;
+        this.rabbitMQPublisher = rabbitMQPublisher;
     }
 
     public void registerCustomer(CustomerRegistrationRequest customerRequest) {
@@ -45,10 +44,16 @@ public class CustomerService {
         
         FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customerEntity.getId());
 
-        notificationClient.sendNotification(new NotificationRequest(customerEntity.getId(),
+        NotificationRequest notificationRequest = new NotificationRequest(customerEntity.getId(),
                 customerEntity.getEmail(),
                 String.format("Hi %s, welcome to microservices...",
-                        customerEntity.getName())));
+                        customerEntity.getName()));
+
+        rabbitMQPublisher.publish(notificationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key");
+
+
         if (fraudCheckResponse.isfraudster()) {
             throw new IllegalStateException("Fraduster");
         }
